@@ -1,6 +1,9 @@
 const errorContainer = document.getElementById("error-container");
+const spinner = document.getElementById("spinner");
 const loadPlayers = async () => {
+    document.getElementById("details-container").textContent = "";
     const playerName = document.getElementById("input-field").value;
+    spinner.style.display = "block";
 
     if (playerName === "") {
         const h3 = document.createElement("h3");
@@ -11,6 +14,7 @@ const loadPlayers = async () => {
         errorContainer.textContent = "";
         errorContainer.appendChild(h3);
         document.getElementById("player-container").textContent = "";
+        spinner.style.display = "none";
     }
 
     else {
@@ -26,10 +30,12 @@ const loadPlayers = async () => {
             errorContainer.appendChild(h3);
             document.getElementById("input-field").value = "";
             document.getElementById("player-container").textContent = "";
+            spinner.style.display = "none";
         }
         else {
             displayPlayers(data.player);
             document.getElementById("input-field").value = "";
+            spinner.style.display = "none";
         }
     }
 }
@@ -82,4 +88,50 @@ const loadDetails = player => {
     fetch(`https://www.thesportsdb.com/api/v1/json/2/lookupplayer.php?id=${player}`)
         .then(res => res.json())
         .then(data => displayDetails(data.players[0]));
+}
+
+const displayDetails = player => {
+    const detailsContainer = document.getElementById("details-container");
+    document.getElementById("player-container").textContent = "";
+    detailsContainer.textContent = "";
+    const male = document.getElementById("male");
+    const female = document.getElementById("female");
+    if (player.strGender === "male" || player.strGender === "Male") {
+        male.style.display = "block";
+        female.style.display = "none";
+    }
+    else {
+        female.style.display = "block";
+        male.style.display = "none";
+    }
+    const div = document.createElement("div");
+    const imgSrc = player.strThumb;
+    if (imgSrc !== null) {
+        div.innerHTML = `
+        <div class="card m-2">
+            <img src="${imgSrc}" class="card-img-top">
+            <div class="card-body">
+            <h3 class="card-title">${player.strPlayer}</h3>
+            <h5>${player.strBirthLocation}</h5>
+            <h5>${player.strNationality}</h5>
+            <p class="card-text">${player.strDescriptionEN}</p>
+            </div>
+        </div>
+        `;
+    }
+    else {
+        div.innerHTML = `
+        <div class="card m-2">
+            <img height=286px; src="images/1.png" class="card-img-top img-fluid">
+            <div class="card-body">
+                <h3 class="card-title">${player.strPlayer}</h3>
+                <h5>${player.strBirthLocation}</h5>
+                <h5>${player.strNationality}</h5>
+                <p class="card-text">${player.strDescriptionEN}</p>
+            </div>
+        </div>
+        `;
+    }
+    detailsContainer.appendChild(div);
+
 }
