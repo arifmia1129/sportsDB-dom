@@ -57,7 +57,7 @@ const displayPlayers = players => {
                 <h5 class="card-title">${player.strPlayer}</h5>
                 <p class="card-text">${player.strBirthLocation}</p>
                 <div>
-                    <button href="#" class="btn btn-danger">Delete</button>
+                    <button id="delete-btn" href="#" class="btn btn-danger delete-btn">Delete</button>
                     <button onclick=loadDetails('${player.idPlayer}') href="#" class="btn btn-success">Details</button>
                 </div>
             </div>
@@ -72,7 +72,7 @@ const displayPlayers = players => {
                 <h5 class="card-title">${player.strPlayer}</h5>
                 <p class="card-text">${player.strBirthLocation}</p>
                 <div>
-                    <button href="#" class="btn btn-danger">Delete</button>
+                    <button  href="#" class="btn btn-danger delete-btn">Delete</button>
                     <button onclick=loadDetails('${player.idPlayer}') href="#" class="btn btn-success">Details</button>
                 </div>
             </div>
@@ -80,6 +80,13 @@ const displayPlayers = players => {
         `;
         }
         parentDiv.appendChild(div);
+
+        const buttons = document.getElementsByClassName("delete-btn");
+        for (const button of buttons) {
+            button.addEventListener("click", function (event) {
+                event.target.parentNode.parentNode.parentNode.style.display = "none";
+            })
+        }
     })
 }
 
